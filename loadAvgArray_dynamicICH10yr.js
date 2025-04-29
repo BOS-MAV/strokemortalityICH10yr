@@ -10,7 +10,7 @@ const measureEnum = {
 let avgLabs = {};
 
 function loadAvgArray() {
-  return fetch('avgLabs.json')
+  return fetch('avgLabsICH10yr.json')
     .then(response => response.json())
     .then(data => {
       avgLabs = data;

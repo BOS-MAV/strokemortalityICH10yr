@@ -13,15 +13,15 @@
  <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"  ></script>
  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"  ></script>
-  <script src="strokeControls.js"></script>
- <script src="riskcalc.js" defer></script>
- <script src="loadAvgArray_dynamic.js"> defer </script>
+  <script src="strokeControlsICH10yr.js"></script>
+ <script src="riskcalcICH10yr.js" defer></script>
+ <script src="loadAvgArray_dynamicICH10yr.js"> defer </script>
     </head>
     <body >
         <form id ="myForm" >
             <div class ="container">
                 <div class="jumbotron clearfix">
-                    <h1 class = "head-center">Risk Prediction Calculator Within 1 year Post-Discharge SAH</h1>
+                    <h1 class = "head-center">Risk Prediction Calculator > 1 year Post-Discharge ICH</h1>
                     <div class="well well-sm">
                         <legend class = "block-legend">Demographic Information</legend>
                         
@@ -147,31 +147,16 @@
                                 </div>
                             </div>
                             <div class ="col-sm-3 col-med-3 col-lg-2">
-                                <div class="btn-group colors" data-toggle="buttons" id ="stat" >
-                                    <label class = "topLabel"><br/>Has taken statin medication?</label>
+                                <div class="btn-group colors" data-toggle="buttons" id ="TBI" >
+                                    <label class = "topLabel"><br/>TBI</label>
                                     <div style="clear: both;"></div>
-                                    <label class="btn btn-primary btn-sm" id = "statinMark"> 
-                                        <span class = "glyphicon glyphicon-check" id = "statinYGlyph" style="display:none"></span>
-                                        <input type="radio" name="Statin" value="Yes"  required> Yes
+                                    <label class="btn btn-primary btn-sm" id = "TBIMark"> 
+                                        <span class = "glyphicon glyphicon-check" id = "TBIYGlyph" style="display:none"></span>
+                                        <input type="radio" name="TBIR" value="Yes"  required> Yes
                                     </label>
-                                    <label class="btn btn-primary btn-sm" id = "statinMark1">
+                                    <label class="btn btn-primary btn-sm" id = "TBIMark1">
                                         <span class = "glyphicon glyphicon-check" id = "statinNGlyph" style="display:none"></span>
-                                        <input type="radio" name="Statin" value="No"  required > No
-                                    </label>
-                                </div>
-                            </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
-
-                                <div class="btn-group colors" data-toggle="buttons" id ="afib" >                             
-                                    <label class = "topLabel"><br/>History of AFIB/AFLUT?</label>
-                                    <div style="clear: both;"></div>
-                                    <label class="btn btn-primary btn-sm" id = "afibMark"> 
-                                        <span class = "glyphicon glyphicon-check" id = "afibYGlyph" style="display:none"></span>
-                                        <input type="radio" name="afib" value="Yes"  required> Yes
-                                    </label>
-                                    <label class="btn btn-primary btn-sm" id = "afibMark1">
-                                        <span class = "glyphicon glyphicon-check" id = "afibNGlyph" style="display:none"></span>
-                                        <input type="radio" name="afib" value="No"  required > No
+                                        <input type="radio" name="TBIR" value="No"  required > No
                                     </label>
                                 </div>
                             </div>
@@ -220,26 +205,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-3">
-                                <div class="btn-group" data-toggle="buttons" >
-                                    <label class = "topLabel">Diastolic Blood Pressure<br/>(mm Hg)</label>
-                                    <div style="clear: both;"></div>
-                                    <label class="btn text-input">
-                                        <input type = "text" id = "BP_Dia" size = "4" maxlength = "3" oninput="this.value=this.value.replace(/[^0-9]/g,'');" />
-                                    </label>
-                                </div>
-                            </div>
-                        
-                    
-                            <div class ="col-sm-3 col-med-3 col-lg-3">
-                                <div class="btn-group" data-toggle="buttons" >
-                                    <label class = "topLabel1">Total Cholesterol<br/>(mg/dL)</label>
-                                    <div style="clear: both;"></div>
-                                    <label class="btn text-input">
-                                        <input type = "text" id = "TotChol" size = "4" maxlength ="3" oninput="this.value=this.value.replace(/[^0-9mM]/g,'');" />
-                                    </label>
-                                </div>
-                            </div>
+
                             <div class ="col-sm-3 col-med-3 col-lg-3">
                                 <div class="btn-group" data-toggle="buttons" >
                                     <label class = "topLabel1">Creatinine<br/>(mg/dL)</label>
@@ -306,7 +272,7 @@
                                             
                     </div>
                 </div>
-                <div class ="Vfooter">Version 1.0  Last updated: 04/15/2025</div>
+                <div class ="Vfooter">Version 1.0  Last updated: 04/29/2025</div>
             </div>
         </form>
         

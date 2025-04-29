@@ -10,8 +10,6 @@
 var txtAgeToolTipOn = 1;
 var txtHospToolTipOn = 1;
 var BP_SysToolTipOn = 1;
-var BP_DiaToolTipOn = 1;
-var totCholToolTipOn = 1;
 var creatToolTipOn = 1;
 var BMIToolTipOn = 1;
 var sexToolTipOn = 1;
@@ -19,7 +17,7 @@ var raceToolTipOn = 1;
 var ethTootTipOn = 1;
 var dementiaToolTipOn = 1;
 var hyperToolTipOn = 1;
-var statinToolTipOn = 1;
+var TBIToolTipOn = 1;
 var priorKidToolTipOn = 1;
 var priorHFToolTipOn = 1;
 
@@ -92,13 +90,11 @@ $(document).ready(function () {
     $("#diabMark").tooltip({title: "Please choose either yes or no",placement: "bottom", trigger: "manual"});
     $("#dementMark").tooltip({title: "Please choose either yes or no",placement:"bottom",trigger:"manual"});
     $("#hyperMark").tooltip({title: "Please choose either yes or no",placement:"bottom",trigger:"manual"});
-    $("#statinMark").tooltip({title: "Please choose either yes or no",placement:"bottom", trigger:"manual"});
+    $("#TBIMark").tooltip({title: "Please choose either yes or no",placement:"bottom", trigger:"manual"});
     $("#priorKid").tooltip({title: "Please choose either yes or no",placement:"bottom",trigger: "manual"});
     $("#priorHF").tooltip({title: "Please choose either yes or no",placement:"bottom",trigger: "manual"});
     $("#afibMark").tooltip({title: "Please choose either yes or no",placement:"bottom",trigger: "manual"});
     $("#BP_Sys").tooltip({title: "Please enter a systolic blood pressure between 80 and 300 mm HG, leave blank if you do not have a value", placement: "right", trigger: "manual"});
-    $("#BP_Dia").tooltip({title: "Please enter a diastolic blood pressure between 50 and 180 mm HG, leave blank if you do not have a value", placement: "right", trigger: "manual"});
-    $("#TotChol").tooltip({title: "Please enter total cholesterol between 0 and 500 mg/dL, leave blank if you do not have a value", placement: "bottom", trigger: "manual"});
     $("#creat").tooltip({title: "Please enter creatinine level between 0.59 and 1.39 mg/dL, leave blank if you do not have a value", placement: "bottom", trigger: "manual"});
     $("#BMI").tooltip({title: "Please enter a BMI between 12 and 60,leave blank if you do not have a value", placement: "bottom", trigger: "manual"});
     function ethnicity_Val() {
@@ -120,11 +116,8 @@ $(document).ready(function () {
     function hypertension_Val() {
         return ($("input[name='Hypertension']:checked").val() === 'Yes' || $("input[name='Hypertension']:checked").val() === 'No');
     }
-    function statin_Val() {
-        return ($("input[name='Statin']:checked").val() === 'Yes' || $("input[name='Statin']:checked").val() === 'No');
-    }
-    function afib_Val() {
-        return ($("input[name='afib']:checked").val() === 'Yes' || $("input[name='afib']:checked").val() === 'No');
+    function TBI_Val() {
+        return ($("input[name='TBIR']:checked").val() === 'Yes' || $("input[name='Statin']:checked").val() === 'No');
     }
     function priorKid_Val() {
         return ($("input[name='priorKid']:checked").val() === 'Yes' || $("input[name='priorKid']:checked").val() === 'No');
@@ -148,12 +141,10 @@ $(document).ready(function () {
                 diabetes_Val() &&
                 dementia_Val() &&
                 hypertension_Val() &&
-                statin_Val() &&
-                afib_Val() &&
+                TBI_Val() &&
                 priorKid_Val() &&
                 priorHF_Val() &&
                 BP_Sys_Val(true) &&
-                BP_Dia_Val(true) &&
                 totChol_Val(true) &&
                 creat_Val(true) &&
                 BMI_Val()) 
@@ -230,22 +221,17 @@ $(document).ready(function () {
                                         else
                                         {
                                             $("#hyperMark").tooltip("hide");
-                                            if (($("input[name = 'Statin']:checked").val() !== 'Yes') && ($("input[name = 'Statin']:checked").val() !== 'No'))
+                                            if (($("input[name = 'TBIR']:checked").val() !== 'Yes') && ($("input[name = 'TBIR']:checked").val() !== 'No'))
                                             {
-                                                $("#statinMark").tooltip("show");
-                                                $("#Statin").focus();
+                                                $("#TBIMark").tooltip("show");
+                                                $("#TBI").focus();
                                             }
                                             else
                                             {
-                                                $("#statinMark").tooltip("hide");
-                                                if (($("input[name= 'afib']:checked").val() !== 'Yes') && ($("input[name= 'afib']:checked").val() !== 'No'))
+                                                $("#TBIMark").tooltip("hide");
+                                               
                                                 {
-                                                    $("#afibMark").tooltip("show");
-                                                    $("#afib").focus();
-                                                }
-                                                else
-                                                {
-                                                    $("#afibMark").tooltip("hide");                                          
+                                         
                                                         
                                                     if (($("input[name= 'priorKid']:checked").val() !== 'Yes') && ($("input[name= 'priorKid']:checked").val() !== 'No'))
                                                     {
@@ -273,24 +259,7 @@ $(document).ready(function () {
                                                         {
                                                             $("#BP_Sys").tooltip("hide");
                                                             BP_SysToolTipOn = 1;
-                                                            if (!(BP_Dia_Val(true)))
-                                                            {
-                                                                $("#BP_Dia").tooltip("show");
-                                                                $("#BP_Dia").focus();
-                                                            }
-                                                            else
-                                                            {
-                                                                $("#BP_Dia").tooltip("hide");
-                                                                BP_DiaToolTipOn = 1;
-                                                                if (!(totChol_Val(true)))
-                                                                {
-                                                                    $("#totChol").tooltip("show");
-                                                                    $("#totChol").focus();
-                                                                }
-                                                                else
-                                                                {
-                                                                    $("#totChol").tooltip("hide");
-                                                                    totCholToolTipOn = 1;
+                                                          
                                                                     if (!(creat_Val(true)))
                                                                     {
                                                                         $("#creat").tooltip("show");
@@ -331,28 +300,11 @@ $(document).ready(function () {
         if (e.key === 'Enter') {
             e.preventDefault();
             if (BP_Sys_Val(false)) {
-                $("#BP_Dia").focus().select();
-            }
-        }
-    });
-
-    $('#BP_Dia').on('keydown', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (BP_Dia_Val(false)) {
-                $("#TotChol").focus().select();
-            }
-        }
-    });
-
-    $('#TotChol').on('keydown', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (totChol_Val(false)) {
                 $("#creat").focus().select();
             }
         }
     });
+
 
     $('#creat').on('keydown', function (e) {
         if (e.key === 'Enter') {
@@ -383,19 +335,6 @@ $(document).ready(function () {
     }
 });
 
-$("#BP_Dia").blur(function () {
-    if (BP_Dia_Val(false))
-    {
-        BP_DiaToolTipOn = 1;
-    }
-});
-
-$("#TotChol").blur(function () {
-    if (totChol_Val(false))
-    {
-        totCholToolTipOn = 1;
-    }
-});
 
 $("#creat").blur(function () {
     if (creat_Val(false))
@@ -548,44 +487,26 @@ $("#ethn").change(function (){
         }
        $("Statin").focus();
     });
-    $("input[name='Statin']").change(function () {
-       $("#statinMark").tooltip("hide");
-       if ($("input[name='Statin']:checked").val()==="Yes")
+    $("input[name='TBI']").change(function () {
+       $("#TBIMark").tooltip("hide");
+       if ($("input[name='TBIR']:checked").val()==="Yes")
         {
-            $("#statinMark").addClass("btn-selected");
-            $("#statinYGlyph").show();
-            $("#statinNGlyph").hide();            
-            $("#statinMark1").removeClass("btn-selected");
+            $("#TBIMark").addClass("btn-selected");
+            $("#TBIYGlyph").show();
+            $("#TBINGlyph").hide();            
+            $("#TBIMark1").removeClass("btn-selected");
         }
         else
         {
             
-            $("#statinMark1").addClass("btn-selected");
-            $("#statinNGlyph").show();
-            $("#statinYGlyph").hide();
-            $("#statinMark").removeClass("btn-selected");
+            $("#TBIMark1").addClass("btn-selected");
+            $("#TBINGlyph").show();
+            $("#TBIYGlyph").hide();
+            $("#TBIMark").removeClass("btn-selected");
         }
-       $("#afib").focus();
+       $("#priorKid").focus();
     });
-    $("input[name='afib']").change(function () {
-        $("#afibMark").tooltip("hide");
-        if ($("input[name='afib']:checked").val()==="Yes")
-         {
-             $("#afibMark").addClass("btn-selected");
-             $("#afibYGlyph").show();
-             $("#afibNGlyph").hide();            
-             $("#afibMark1").removeClass("btn-selected");
-         }
-         else
-         {
-             
-             $("#afibMark1").addClass("btn-selected");
-             $("#afibNGlyph").show();
-             $("#afibYGlyph").hide();
-             $("#afibMark").removeClass("btn-selected");
-         }
-        $("#priorKid").focus().select();
-     });
+ 
      $("input[name='priorKid']").change(function () {
         $("#priorKid").tooltip("hide");
         if ($("input[name='priorKid']:checked").val()==="Yes")
@@ -639,7 +560,7 @@ $("#ethn").change(function (){
         if (BP_Sys_Val(false))
         {
             setTimeout(function () {
-                $("#BP_Dia").focus().select();
+                $("#creat").focus().select();
             }, 100);
             BP_SysToolTipOn = 1;
         }
@@ -648,49 +569,13 @@ $("#ethn").change(function (){
         if (e.key === 'Enter') {
             e.preventDefault();
             if (BP_Sys_Val(false)) {
-                $("#BP_Dia").focus().select();
+                $("#creat").focus().select();
             }
         }
     });
-    $("#BP_Dia").blur(function () {
-       
-       if (BP_Dia_Val(false))
-       {
-        BP_DiaToolTipOn = 1;
-       }
-    });
-    $("#BP_Dia").change(function () {
-     
-        if (BP_Dia_Val(false))
-        {
-            setTimeout(function () {
-                $("#TotChol").focus().select();
-            }, 100);
-            BP_DiaToolTipOn = 1;
-        }
-        else 
-            $("BP_Dia").focus().select();
-    });
-    $("#TotChol").blur(function () {
-       if (totChol_Val(false))
-       {
-        setTimeout(function () {
-            $("#creat").focus().select();
-        }, 100);
-        totCholToolTipOn = 1;
-       }
-    });
-    $("#TotChol").change(function () {
-        if (totChol_Val(false))
-        {
-            setTimeout(function () {
-                $("#creat").focus().select();
-            }, 100);
-         totCholToolTipOn = 1;
-        }
-     });
     
-});
+    
+
 
 function txtAge_Val() {
         var input = $("#txtAge");
@@ -783,73 +668,6 @@ function BP_Sys_Val(finalChk) {
     }
 }
 
-function BP_Dia_Val(finalChk) {
-    var input = $("#BP_Dia");
-    if (input.val() === ''  && !finalChk)
-    {
-        BP_DiaFirst = false;
-        return false;
-    }
-
-    if (parseInt(input.val()) < 50 || parseInt(input.val()) > 180 )
-    {
-
-        if (BP_DiaToolTipOn ===1)
-        {
-            $("#BP_Dia").tooltip("show");
-            $("#BP_Dia").removeClass("valid").addClass("invalid");
-            $("#myForm input").prop("disabled",true);
-            $("#myForm button").prop("disabled",true);
-            $("#BP_Dia").prop("disabled",false);
-            $("#BP_Dia").focus();
-            BP_DiaToolTipOn = 0;
-        }
-        return false;
-    }
-    else
-    {
-        $("#BP_Dia").tooltip("hide");
-        $("#BP_Dia").removeClass("invalid").addClass("valid");
-        $("#myForm input").prop("disabled",false);
-        $("#myForm button").prop("disabled",false);
-        $("#TotChol").focus();
-        return true;
-    }
-}
-
-function totChol_Val(finalChk) {
-    var input = $("#TotChol");
-    if (input.val() === ''  && !finalChk)
-    {
-        totcholFirst = false;
-        return false;
-    }
-
-    if (parseInt(input.val()) < -1 || parseInt(input.val()) > 500)
-    {
-
-        if (totCholToolTipOn === 1)
-        {
-            $("#TotChol").tooltip("show");
-            $("#TotChol").removeClass("valid").addClass("invalid");
-            $("#myForm input").prop("disabled",true);
-            $("#myForm button").prop("disabled",true);
-            $("#TotChol").prop("disabled",false); 
-            $("#TotChol").focus();
-            totCholToolTipOn = 0;            
-        }
-        return false;
-    }
-    else
-    {
-        $("#TotChol").tooltip("hide");
-        $("#TotChol").removeClass("invalid").addClass("valid");
-        $("#myForm input").prop("disabled",false);
-        $("#myForm button").prop("disabled",false);
-        $("#creat").focus().select();
-        return true;
-    }
-}
 
 function creat_Val(finalChk) {
     var input = $("#creat");
