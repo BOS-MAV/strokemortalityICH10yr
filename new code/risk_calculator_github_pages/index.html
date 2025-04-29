@@ -1,0 +1,35 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Risk Calculator</title>
+    <script src="https://code.jquery.com/jquery-3.1.0.js" defer></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" defer></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" defer></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="loadAvgArray_dynamic.js" defer></script>
+    <script>
+      $(function () {
+        $('[data-toggle="tooltip"]').tooltip({ trigger: 'focus', placement: 'bottom' });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Risk Calculator</h1>
+      <form>
+        <label for="txtAge">Age</label>
+        <input id="txtAge" type="text" data-toggle="tooltip" title="Age must be between 20 and 79" class="form-control">
+        
+        <label for="BP_Dia">Diastolic BP</label>
+        <input id="BP_Dia" type="text" data-toggle="tooltip" title="Diastolic BP between 50 and 180" class="form-control">
+        
+        <label for="TotChol">Total Cholesterol</label>
+        <input id="TotChol" type="text" data-toggle="tooltip" title="Cholesterol between 0 and 500" class="form-control">
+        
+        <button type="button" onclick="loadAvgArray()">Load Lab Averages</button>
+      </form>
+    </div>
+  </body>
+</html>
