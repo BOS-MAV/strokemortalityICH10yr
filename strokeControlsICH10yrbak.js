@@ -1,6 +1,6 @@
 /* Program Title: strokeControl.js
  * Author: John Russo
- * Date: April 2025
+ * Date: April/May 2025
  *
  * Description: This program controls all data entry and navigation for the stroke 1 yr SAH
  *
@@ -10,20 +10,23 @@
 var txtAgeToolTipOn = 1;
 var txtHospToolTipOn = 1;
 var BP_SysToolTipOn = 1;
-var BP_DiaToolTipOn = 1;
+var creatToolTipOn = 1;
 var BMIToolTipOn = 1;
+var sexToolTipOn = 1;
+var raceToolTipOn = 1;
+var ethTootTipOn = 1;
 var dementiaToolTipOn = 1;
 var hyperToolTipOn = 1;
 var TBIToolTipOn = 1;
 var priorKidToolTipOn = 1;
 var priorHFToolTipOn = 1;
-var sexToolTipOn = 1;
-var raceToolTipOn = 1;
 
 // variables to flag when a field has not been entered into yet
 var txtHospFirst = true;
 var BP_SysFirst = true;
 var BP_DiaFirst = true;
+var totcholFirst = true;
+var creatFirst = true;
 var BMIFirst = true;
 
 /*function to fix problem with digits - i.e. user enters 1..2 */
@@ -35,25 +38,6 @@ function enforceOneDigitTwoDecimal(input) {
   }
 
   const match = input.match(/^(\d)?(?:\.(\d{0,2})?)?/);
-  if (match) {
-    const before = match[1] || "";
-    const after = match[2] || "";
-    return before + (after !== "" ? "." + after : "");
-  }
-
-  return "";
-}
-
-//similar function except for two digit (like BMI)
-function enforceTwoDigitTwoDecimal(input) {
-  input = input.replace("/[^d.]/g", "");
-  const parts = input.split(".");
-  if (parts.length > 3) {
-    input =
-      parts[0] + parts[1] + "." + parts.slice(1).join("").replace(/\./g, "");
-  }
-
-  const match = input.match(/^(\d{2})?(?:\.(\d{0,2})?)?/);
   if (match) {
     const before = match[1] || "";
     const after = match[2] || "";
@@ -112,6 +96,11 @@ $(document).ready(function () {
     placement: "bottom",
     trigger: "manual",
   });
+  $("#ethnMark").tooltip({
+    title: "Please choose not Hispanic/Latino or Hispanic/Latino",
+    placement: "bottom",
+    trigger: "manual",
+  });
   $("#txtHosp").tooltip({
     title: "Please enter a value between 1 and 365",
     placement: "bottom",
@@ -147,16 +136,21 @@ $(document).ready(function () {
     placement: "bottom",
     trigger: "manual",
   });
+  $("#afibMark").tooltip({
+    title: "Please choose either yes or no",
+    placement: "bottom",
+    trigger: "manual",
+  });
   $("#BP_Sys").tooltip({
     title:
       "Please enter a systolic blood pressure between 80 and 300 mm HG, leave blank if you do not have a value",
     placement: "right",
     trigger: "manual",
   });
-  $("#BP_Dia").tooltip({
+  $("#creat").tooltip({
     title:
-      "Please enter a diastolic blood pressure between 50 and 180 mm HG, leave blank if you do not have a value",
-    placement: "right",
+      "Please enter creatinine level between 0.59 and 1.39 mg/dL, leave blank if you do not have a value",
+    placement: "bottom",
     trigger: "manual",
   });
   $("#BMI").tooltip({
@@ -165,6 +159,12 @@ $(document).ready(function () {
     placement: "bottom",
     trigger: "manual",
   });
+  function ethnicity_Val() {
+    return (
+      $("input[name='Ethnicity']:checked").val() === "nhisp" ||
+      $("input[name='Ethnicity']:checked").val() === "hisp"
+    );
+  }
   function sex_Val() {
     return (
       $("input[name='Sex']:checked").val() === "Male" ||
@@ -201,7 +201,7 @@ $(document).ready(function () {
   function TBI_Val() {
     return (
       $("input[name='TBIR']:checked").val() === "Yes" ||
-      $("input[name='TBIR']:checked").val() === "No"
+      $("input[name='Statin']:checked").val() === "No"
     );
   }
   function priorKid_Val() {
@@ -228,6 +228,7 @@ $(document).ready(function () {
       txtAge_Val() &&
       sex_Val() &&
       race_Val() &&
+      ethnicity_Val() &&
       txtHosp_Val() &&
       diabetes_Val() &&
       dementia_Val() &&
@@ -236,22 +237,23 @@ $(document).ready(function () {
       priorKid_Val() &&
       priorHF_Val() &&
       BP_Sys_Val(true) &&
-      BP_Dia_Val(true) &&
-      BMI_Val(true)
+      creat_Val(true) &&
+      BMI_Val()
     ) {
       event.preventDefault();
       var risk_res = [];
       risk_res = calc_risk();
       $("#message").html(
-        "&nbsp;1-2 year survival probability = " +
+        "1-2 year survival probability &nbsp;= " +
           risk_res[0] +
-          "%<br/>&nbsp;1-5 year survival probability = " +
+          "%<br/>1-5 year survival probability &nbsp;= " +
           risk_res[1] +
-          "%</br>1-10 year survival probability = " +
+          "%<br/>1-10 year survival probability = " +
           risk_res[2] +
           "%"
       );
       //$('#message').html('Results ' + calc_risk()+"%");
+      console.log("clicked");
       $("#myModal").modal("show");
     } else {
       //find out where invalid value is or unchecked button
@@ -275,77 +277,94 @@ $(document).ready(function () {
           ) {
             $("#raceMark").tooltip("show");
             $("#race").focus();
-          } else $("#raceMark").tooltip("hide");
-          if (txtHosp_Val()) {
+          } else {
+            $("#raceMark").tooltip("hide");
+            console.log($("input[name = 'Ethnicity']:checked").val() + "x");
             if (
-              $("input[name = 'Diabetes']:checked").val() !== "Yes" &&
-              $("input[name = 'Diabetes']:checked").val() != "No"
+              $("input[name = 'Ethnicity']:checked").val() != "nhisp" &&
+              $("input[name = 'Ethnicity']:checked").val() != "hisp"
             ) {
-              $("#diabMark").tooltip("show");
-              $("#diab").focus();
+              $("#ethnMark").tooltip("show");
+              $("#ethn").focus();
             } else {
-              $("#diabMark").tooltip("hide");
-
-              if (
-                $("input[name = 'Dementia']:checked").val() !== "Yes" &&
-                $("input[name = 'Dementia']:checked").val() !== "No"
-              ) {
-                console.log($("input[name = 'Dementia']:checked").val());
-                $("#dementMark").tooltip("show");
-                $("#dementia").focus().select();
-              } else {
-                $("#dementMark").tooltip("hide");
+              $("#ethnMark").tooltip("hide");
+              if (txtHosp_Val()) {
                 if (
-                  $("input[name = 'Hypertension']:checked").val() !== "Yes" &&
-                  $("input[name = 'Hypertension']:checked").val() !== "No"
+                  $("input[name = 'Diabetes']:checked").val() !== "Yes" &&
+                  $("input[name = 'Diabetes']:checked").val() != "No"
                 ) {
-                  $("#hyperMark").tooltip("show");
-                  $("#hbp").focus();
+                  $("#diabMark").tooltip("show");
+                  $("#diab").focus();
                 } else {
-                  $("#hyperMark").tooltip("hide");
+                  $("#diabMark").tooltip("hide");
+
                   if (
-                    $("input[name = 'TBIR']:checked").val() !== "Yes" &&
-                    $("input[name = 'TBIR']:checked").val() !== "No"
+                    $("input[name = 'Dementia']:checked").val() !== "Yes" &&
+                    $("input[name = 'Dementia']:checked").val() !== "No"
                   ) {
-                    $("#TBIMark").tooltip("show");
-                    $("#TBI").focus();
+                    $("#dementMark").tooltip("show");
+                    $("#dementia").focus().select();
                   } else {
-                    $("#TBIMark").tooltip("hide");
-
+                    $("#dementMark").tooltip("hide");
                     if (
-                      $("input[name= 'priorKid']:checked").val() !== "Yes" &&
-                      $("input[name= 'priorKid']:checked").val() !== "No"
+                      $("input[name = 'Hypertension']:checked").val() !==
+                        "Yes" &&
+                      $("input[name = 'Hypertension']:checked").val() !== "No"
                     ) {
-                      $("#priorKid").tooltip("show");
-                      $("#priorKid").focus();
+                      $("#hyperMark").tooltip("show");
+                      $("#hbp").focus();
                     } else {
-                      $("#priorKid").tooltip("hide");
+                      $("#hyperMark").tooltip("hide");
                       if (
-                        $("input[name= 'priorHF']:checked").val() !== "Yes" &&
-                        $("input[name= 'priorHF']:checked").val() !== "No"
+                        $("input[name = 'TBIR']:checked").val() !== "Yes" &&
+                        $("input[name = 'TBIR']:checked").val() !== "No"
                       ) {
-                        $("#priorHF").tooltip("show");
-                        $("#priorHF").focus();
-                      } else $("#priorHF").tooltip("hide");
-                      if (!BP_Sys_Val(true)) {
-                        $("#BP_Sys").tooltip("show");
-                        $("#BP_Sys").focus();
+                        $("#TBIMark").tooltip("show");
+                        $("#TBI").focus();
                       } else {
-                        $("#BP_Sys").tooltip("hide");
-                        BP_SysToolTipOn = 1;
-                        if (!BP_Dia_Val(true)) {
-                          $("#BP_Dia").tooltip("show");
-                          $("#BP_Dia").focus();
-                        } else {
-                          $("#BP_Dia").tooltip("hide");
-                          BP_DiaToolTipOn = 1;
+                        $("#TBIMark").tooltip("hide");
 
-                          if (!BMI_Val(true)) {
-                            $("#BMI").tooltip("show");
-                            $("#BMI").focus().select();
+                        {
+                          if (
+                            $("input[name= 'priorKid']:checked").val() !==
+                              "Yes" &&
+                            $("input[name= 'priorKid']:checked").val() !== "No"
+                          ) {
+                            $("#priorKid").tooltip("show");
+                            $("#priorKid").focus();
                           } else {
-                            $("#BMIL").tooltip("hide");
-                            BMIToolTipOn = 1;
+                            $("#priorKid").tooltip("hide");
+                            if (
+                              $("input[name= 'priorHF']:checked").val() !==
+                                "Yes" &&
+                              $("input[name= 'priorHF']:checked").val() !== "No"
+                            ) {
+                              $("#priorHF").tooltip("show");
+                              $("#priorHF").focus();
+                            } else {
+                              $("#priorHF").tooltip("hide");
+                              if (!BP_Sys_Val(true)) {
+                                $("#BP_Sys").tooltip("show");
+                                $("#BP_Sys").focus();
+                              } else {
+                                $("#BP_Sys").tooltip("hide");
+                                BP_SysToolTipOn = 1;
+                              }
+                              if (!creat_Val(true)) {
+                                $("#creat").tooltip("show");
+                                $("#creat").focus().select();
+                              } else {
+                                $("#creat").tooltip("hide");
+                                creatToolTipOn = 1;
+                                if (!BMI_Val()) {
+                                  $("#BMI").tooltip("show");
+                                  $("#BMI").focus().select();
+                                } else {
+                                  $("#BMI").tooltip("hide");
+                                  BMIToolTipOn = 1;
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -359,24 +378,24 @@ $(document).ready(function () {
       }
     }
   });
+
   $("#BP_Sys").on("keydown", function (e) {
     if (e.key === "Enter") {
       e.preventDefault();
       if (BP_Sys_Val(false)) {
-        $("#BP_Dia").focus().select();
+        $("#creat").focus().select();
       }
     }
   });
 
-  $("#BP_Dia").on("keydown", function (e) {
+  $("#creat").on("keydown", function (e) {
     if (e.key === "Enter") {
       e.preventDefault();
-      if (BP_Dia_Val(false)) {
-        $("#TotChol").focus().select();
+      if (creat_Val(false)) {
+        $("#BMI").focus().select();
       }
     }
   });
-
   $("#txtAge").blur(function () {
     if (txtAge_Val()) {
       txtAgeToolTipOn = 1;
@@ -395,17 +414,25 @@ $(document).ready(function () {
     }
   });
 
-  $("#BP_Dia").blur(function () {
-    if (BP_Dia_Val(false)) {
-      BP_DiaToolTipOn = 1;
+  $("#creat").blur(function () {
+    if (creat_Val(false)) {
+      creatToolTipOn = 1;
     }
   });
 
   $("#BMI").blur(function () {
-    if (BMI_Val(false)) {
+    if (BMI_Val()) {
       BMIToolTipOn = 1;
     }
   });
+
+  $("#ethn").change(function () {
+    //$("#txtHosp").focus().select();
+    setTimeout(function () {
+      $("#txtHosp").focus().select();
+    }, 100);
+  });
+
   $("input[name='Sex']").change(function () {
     $("#sexMark").tooltip("hide");
     if ($("input[name='Sex']:checked").val() === "Male") {
@@ -446,9 +473,6 @@ $(document).ready(function () {
       $("#raceMark").removeClass("btn-selected");
       $("#raceMark1").removeClass("btn-selected");
     }
-    setTimeout(function () {
-      $("#txtHosp").focus().select();
-    }, 100);
   });
   $("input[name='Ethnicity']").change(function () {
     $("#ethnMark").tooltip("hide");
@@ -493,7 +517,7 @@ $(document).ready(function () {
       $("#dementYGlyph").hide();
       $("#dementMark").removeClass("btn-selected");
     }
-    $("#TBI").focus();
+    $("#hbp").focus();
   });
   $("input[name='Hypertension']").change(function () {
     $("#hyperMark").tooltip("hide");
@@ -508,16 +532,14 @@ $(document).ready(function () {
       $("#hyperYGlyph").hide();
       $("#hyperMark").removeClass("btn-selected");
     }
-    setTimeout(function () {
-      $("#BP_Sys").focus().select();
-    }, 100);
+    $("Statin").focus();
   });
   $("input[name='TBIR']").change(function () {
     $("#TBIMark").tooltip("hide");
     if ($("input[name='TBIR']:checked").val() === "Yes") {
       $("#TBIMark").addClass("btn-selected");
       $("#TBIYGlyph").show();
-      $("#statinNGlyph").hide();
+      $("#TBINGlyph").hide();
       $("#TBIMark1").removeClass("btn-selected");
     } else {
       $("#TBIMark1").addClass("btn-selected");
@@ -558,19 +580,19 @@ $(document).ready(function () {
     }
     // $("#BP_Sys").focus().select();
     setTimeout(function () {
-      $("#hbp").focus().select();
+      $("#BP_Sys").focus().select();
     }, 100);
   });
   /* $("#BP_Sys").blur(function () {
-        if (BP_Sys_Val())
-        {
-            BP_SysToolTipOn = 1;
-        }
-    });*/
+         if (BP_Sys_Val())
+         {
+             BP_SysToolTipOn = 1;
+         }
+     });*/
   $("#BP_Sys").change(function () {
     if (BP_Sys_Val(false)) {
       setTimeout(function () {
-        $("#BP_Dia").focus().select();
+        $("#creat").focus().select();
       }, 100);
       BP_SysToolTipOn = 1;
     }
@@ -579,22 +601,9 @@ $(document).ready(function () {
     if (e.key === "Enter") {
       e.preventDefault();
       if (BP_Sys_Val(false)) {
-        $("#BP_Dia").focus().select();
+        $("#creat").focus().select();
       }
     }
-  });
-  $("#BP_Dia").blur(function () {
-    if (BP_Dia_Val(false)) {
-      BP_DiaToolTipOn = 1;
-    }
-  });
-  $("#BP_Dia").change(function () {
-    if (BP_Dia_Val(false)) {
-      setTimeout(function () {
-        $("#TotChol").focus().select();
-      }, 100);
-      BP_DiaToolTipOn = 1;
-    } else $("BP_Dia").focus().select();
   });
 
   function txtAge_Val() {
@@ -662,9 +671,9 @@ $(document).ready(function () {
         $("#myForm input").prop("disabled", true);
         $("#myForm button").prop("disabled", true);
         /* $("#BP_Sys").prop("disabled",false);
-            $("#BP_Sys").focus();*/
+                 $("#BP_Sys").focus();*/
         input.prop("disabled", false).focus();
-        bySysToolTipOn = 0;
+        BP_SysToolTipOn = 0;
       }
       return false;
     } else {
@@ -677,60 +686,75 @@ $(document).ready(function () {
     }
   }
 
-  function BP_Dia_Val(finalChk) {
-    var input = $("#BP_Dia");
+  function creat_Val(finalChk) {
+    var input = $("#creat");
     if (input.val() === "" && !finalChk) {
-      BP_DiaFirst = false;
+      creatFirst = false;
       return false;
     }
-
-    if (parseInt(input.val()) < 50 || parseInt(input.val()) > 180) {
-      if (BP_DiaToolTipOn === 1) {
-        $("#BP_Dia").tooltip("show");
-        $("#BP_Dia").removeClass("valid").addClass("invalid");
-        $("#myForm input").prop("disabled", true);
-        $("#myForm button").prop("disabled", true);
-        $("#BP_Dia").prop("disabled", false);
-        $("#BP_Dia").focus();
-        BP_DiaToolTipOn = 0;
-      }
-      return false;
+    if (enforceOneDigitTwoDecimal(input.val()) != input.val()) {
+      $("#creat").val(enforceOneDigitTwoDecimal(input.val()));
+      $("#BMI").focus().select();
+      /*if (creatToolTipOn === 1)
+                {
+                    $("#creat").tooltip("show");
+                    $("#creat").removeClass("valid").addClass("invalid");
+                    $("#myForm input").prop("disabled",true);
+                    $("#myForm button").prop("disabled",true);
+                    $("#creat").prop("disabled",false); 
+                    $("#creat").focus();
+                    creatToolTipOn = 0;            
+                }
+                return false;*/
     } else {
-      $("#BP_Dia").tooltip("hide");
-      $("#BP_Dia").removeClass("invalid").addClass("valid");
-      $("#myForm input").prop("disabled", false);
-      $("#myForm button").prop("disabled", false);
-      $("#TotChol").focus();
-      return true;
-    }
-  }
-
-  function BMI_Val(finalChk) {
-    var input = $("#BMI");
-    if (input.val() === "" && !finalChk) {
-      return false;
-    }
-    if (enforceTwoDigitTwoDecimal(input.val()) != input.val()) {
-      $("#BMI").val(enforceTwoDigitTwoDecimal(input.val()));
-    } else {
-      if (parseFloat(input.val()) < 12 || parseFloat(input.val()) > 49) {
-        if (BMIToolTipOn === 1) {
-          $("#BMI").tooltip("show");
-          $("#BMI").removeClass("valid").addClass("invalid");
+      if (
+        input.val() !== "" &&
+        (parseFloat(input.val()) < 0.59 || parseFloat(input.val()) > 1.39)
+      ) {
+        if (creatToolTipOn === 1) {
+          $("#creat").tooltip("show");
+          $("#creat").removeClass("valid").addClass("invalid");
           $("#myForm input").prop("disabled", true);
           $("#myForm button").prop("disabled", true);
-          $("#BMI").prop("disabled", false);
-          $("#BMI").focus();
-          BMIToolTipOn = 0;
+          $("#creat").prop("disabled", false);
+          $("#creat").focus().select();
+          creatToolTipOn = 0;
         }
         return false;
       } else {
-        $("#BMI").tooltip("hide");
-        $("#BMI").removeClass("invalid").addClass("valid");
+        $("#creat").tooltip("hide");
+        $("#creat").removeClass("invalid").addClass("valid");
         $("#myForm input").prop("disabled", false);
         $("#myForm button").prop("disabled", false);
+        $("#BMI").focus().select();
         return true;
       }
+    }
+  }
+  function BMI_Val() {
+    var input = $("#BMI");
+    if (BMIFirst) {
+      BMIFirst = false;
+      return true;
+    }
+
+    if (parseFloat(input.val()) < 12 || parseFloat(input.val()) > 49) {
+      if (BMIToolTipOn === 1) {
+        $("#BMI").tooltip("show");
+        $("#BMI").removeClass("valid").addClass("invalid");
+        $("#myForm input").prop("disabled", true);
+        $("#myForm button").prop("disabled", true);
+        $("#BMI").prop("disabled", false);
+        $("#BMI").focus();
+        BMIToolTipOn = 0;
+      }
+      return false;
+    } else {
+      $("#BMI").tooltip("hide");
+      $("#BMI").removeClass("invalid").addClass("valid");
+      $("#myForm input").prop("disabled", false);
+      $("#myForm button").prop("disabled", false);
+      return true;
     }
   }
 });
