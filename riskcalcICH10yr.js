@@ -9,23 +9,22 @@ function calc_risk() {
                 //declare a totscore variable
                var totScore;
                 //declare variables to hold the rest
-                var age,ageCat,ageWeight, sex, sex_t,sexWeight,race, race_t, raceWeight,diabetes, diabetesWeight, 
-                    dementia, dementiaWeight, bpmeds, bpmedsWeight, statin, statinWeight, systolic,
-                    systolicWeight,diastolic, diastolicWeight, totChlWeight,priorKid,priorKidWeight,
-                    priorHF,priorHFWeight,BMI,BMIWeight,aFibFlut,aFibFlutWeight,ethnicity_t,
-                    ethnicityWeight,creatinine,creatWeight,hospLength,hospLengthWeight, marker;
-               const risk = [0,0,0,0];
+                var age,ageCat,ageWeight, sex, sex_t,sexWeight,diabetes, diabetesWeight, 
+                    dementia, dementiaWeight,  systolic,systolicWeight,priorKid,priorKidWeight,
+                    priorHF,priorHFWeight,BMI,BMIWeight,ethnicity_t,ethnicityWeight,creatinine,
+                    creatWeight,hospLength,hospLengthWeight,TBIWeight, marker;
+               const risk = [0,0,0];
                 age = parseInt($("#txtAge").val());
                 // break out age by categories to compute weight
                 if (age >=18 && age <= 44)
                 {
                     ageCat = 1;
-                    ageWeight =  -1.219764;
+                    ageWeight =  -0.98376;
                 }
                 else if (age <= 54)
                 {
                     ageCat = 2;
-                    ageWeight =  -0.206187;
+                    ageWeight =  -0.26662;
                 }
                 else if (age <= 64)
                 {
@@ -35,11 +34,11 @@ function calc_risk() {
                 else if (age <=74)
                 {
                     ageCat = 4;
-                    ageWeight =  0.369326;
+                    ageWeight =  0.27649;
                 }
                 else if (age >= 75)
                 {
-                    ageWeight = 0.741036;
+                    ageWeight = 0.793;
                     ageCat = 5;
                 }
                 //next sex
@@ -47,32 +46,24 @@ function calc_risk() {
                 if ( sex_t === "Male")
                     sexWeight = 0;
                 else
-                    sexWeight = -0.917804;
-                //race
-                race_t = $("input[name = 'Race']:checked").val();
-                if (race_t === 'White')
-                    raceWeight = 0;
-                else if (race_t === 'Black')
-                    raceWeight = -0.42124;
-                else
-                    raceWeight = -0.893634;
+                    sexWeight = -0.41222;
                 // ethnicity
                 ethnicity_t = $("input[name='Ethnicity']:checked").val();
                 if (ethnicity_t === "nhisp")
                     ethnicityWeight = 0;
                 else
-                    ethnicityWeight = -0.456962;
+                    ethnicityWeight = -0.23512;
                 //length of hospitilization
                 hospLength = parseInt($("#txtHosp").val());
                 //determine weights based on cat
                 if (hospLength <=4)
                     hospLengthWeight = 0;
                 else if (hospLength <=9)
-                    hospLengthWeight = 0.001074;
+                    hospLengthWeight = 0.13458;
                 else if (hospLength <=29)
-                    hospLengthWeight = -0.383472;
+                    hospLengthWeight = 0.41439;
                 else if (hospLength <=89)
-                    hospLengthWeight = 0.130277;
+                    hospLengthWeight = 0.01992;
                 else
                     hospLengthWeight = -0.856633;
                 // diabetes
@@ -80,38 +71,28 @@ function calc_risk() {
                     diabetes = 1;
                 else
                     diabetes = 0;
-                diabetesWeight = diabetes * 0.356293;
+                diabetesWeight = diabetes * 0.11899;
                 //dementia
                 if ($("input[name = 'Dementia']:checked").val() === "Yes")
                     dementia = 1;
                 else
                     dementia = 0;
-                dementiaWeight = dementia * 0.487236;
+                dementiaWeight = dementia * 0.5389;
                 //bpmeds
                 if ($("input[name='Hypertension']:checked").val()==="No")
                     bpmedsWeight =0;
                 else
-                    bpmedsWeight = 0.372307;
-                //statin
-                if ($("input[name = 'Statin']:checked").val() === "No")
-                    statinWeight = 0;
-                else
-                    statinWeight = -0.669057;
-                //afib/aflut
-                if ($("input[name = 'afib']:checked").val() == "No")
-                    aFibFlutWeight = 0;
-                else
-                    aFibFlutWeight = 0.061135;
+                    bpmedsWeight = -0.11648;
                 //prior chronic kidney disease
                 if ($("input[name = 'priorKid']:checked").val() == "No")
                     priorKidWeight = 0;
                 else
-                    priorKidWeight= 0.18038;
+                    priorKidWeight= 0.1624;
                 //prior heart failure
                 if ($("input[name = 'priorHF']:checked").val() == "No")
                     priorHFWeight = 0;
                 else
-                    priorHFWeight= 0.348644;
+                    priorHFWeight= 0.38008;
                 //blood pressure/labs
                 if ($("#BP_Sys").val() ==="" || $("#BP_Sys").val() ==="M" || $("#BP_Sys").val() ==="m" )
                     {
@@ -125,63 +106,14 @@ function calc_risk() {
                     }
                     //compute weights for bpsys;
                     if (bpSys < 120)
-                        bpSysWeight = 0.149123;
+                        bpSysWeight = 0.14765;
                     else if (bpSys <=129)
-                        bpSysWeight = 0.195138;
+                        bpSysWeight = 0.17194;
                     else if (bpSys <= 139)
                         bpSysWeight = 0;
                     else 
-                        bpSysWeight = -0.169898;
-    
-                    //diastolic
-                    if ($("#BP_Dia").val() ==="" || $("#BP_Dia").val() ==="M" || $("#BP_Dia").val() ==="m" )
-                        {
-                            marker = sex_t.trim().toLowerCase()+race_t.trim().toLowerCase()+ageCat;
-                            console.log(marker);
-                            bpDia = avgLabs[marker].measure[measureEnum.AVGDIA];
-                        }
-                        else
-                        {           
-                            bpDia = parseFloat($("#BP_Dia").val());
-                        }
-                        //compute weights for bpdia;
-                    if (bpDia < 80)
-                        bpDiaWeight = 0;
-                    else if (bpDia <=89)
-                        bpDiaWeight = -0.449733;
-                    else 
-                        bpDiaWeight = -0.553234;
-                // total chol
-                //if missing then find average based on sex, race, agegroup
-                if ($("#TotChol").val() ==="" || $("#TotChol").val() === "M" || $("#TotChol").val()  === "m" )
-                {
-                    marker = sex_t.trim().toLowerCase()+race_t.trim().toLowerCase()+ageCat;
-                    console.log(marker);
-                    totchl = avgLabs[marker].measure[measureEnum.AVGCHOL];
-                    console.log(totchl);
-                }
-                else
-                {
-                    totchl = parseFloat($("#TotChol").val());
-                    console.log("WHAT");
-                    console.log(parseFloat($("#TotChol").val()));
-                }
-                if (totchl  < 200 && totchl != 0)
-                {
-                    totchlWeight = 0;
-                }
-                else if (totchl >= 200 && totchl <= 239)
-                {
-                    totchlWeight = -0.238663;
-                }
-                else if (totchl > 250)
-                {
-                    totchlWeight = 0.160522;
-                }
-                else
-                {
-                    totchlWeight = 0;
-                }             
+                        bpSysWeight = 0.1596;
+               
                 // bmi
                 if ($("#BMI").val() ==="" || $("#BMI").val() ==="M" || $("#BMI").val() ==="m" )
                     {
@@ -195,17 +127,17 @@ function calc_risk() {
                     }
                     //compute weights for BMI;
                 if (BMI < 18.5)
-                   BMIWeight = -0.298829;
+                   BMIWeight = 0.65892;
                 else if (BMI <=24.9)
-                    BMIWeight = 0.259709;
+                    BMIWeight = 0.26783;
                 else if (BMI <=29.9)
                     BMIWeight = 0;
                 else if (BMI <=34.9)
-                    BMIWeight = -0.389093;
+                    BMIWeight = -0.13744;
                 else if (BMI <=39.9)
-                    BMIWeight = -0.618178;
+                    BMIWeight = -0.01768;
                 else
-                    BMIWeight = -0.618178;
+                    BMIWeight = -0.08244;
                 // creatine
                 if ($("#creat").val()  === '' || $("#creat").val() === "M" || $("#creat").val() ==="m")
                 {
@@ -215,16 +147,20 @@ function calc_risk() {
                 else
                     creatinine = parseFloat($("#creat").val());
                 if (creatinine < 0.74)
-                    creatWeight = 0.176296;
+                    creatWeight = 0.04083;
                 else if (creatinine <= 1.35)
                     creatWeight = 0;
                 else
-                    creatWeight = 0.07012;
+                    creatWeight = 0.22305;
+                //TBI
+                if ($("input[name = 'TBIR']:checked").val() === "No")
+                    TBIWeight = 0;
+                else
+                    TBIWeight = 0.39449;
 
-                xbeta = ageWeight + sexWeight + raceWeight + ethnicityWeight + hospLengthWeight +
-                        diabetesWeight + dementiaWeight + bpmedsWeight+statinWeight+aFibFlutWeight
-                        +priorKidWeight+priorHFWeight+bpSysWeight+bpDiaWeight+totchlWeight+
-                        creatWeight+BMIWeight;
+                xbeta = ageWeight + sexWeight +  ethnicityWeight + hospLengthWeight +
+                        diabetesWeight + dementiaWeight + bpmedsWeight+priorKidWeight+
+                        priorHFWeight+bpSysWeight+creatWeight+BMIWeight;
                 console.log(creatWeight);
                 console.log(ageWeight);
                 //eXbeta = Math.exp(xbeta-2.93853);
@@ -233,9 +169,8 @@ function calc_risk() {
                 console.log(xbeta);
                 console.log(eXbeta);
                 //risk = 1 - Math.pow(0.98731,eXbeta);
-                risk[0] = numberFormat(Math.pow(0.9381234,eXbeta)*100,2);
-                risk[1] = numberFormat(Math.pow(0.900994,eXbeta)*100,2);
-                risk[2] = numberFormat(Math.pow(0.8724128,eXbeta)*100,2);
-                risk[3] = numberFormat(Math.pow(0.8289787,eXbeta)*100,2);
+                risk[0] = numberFormat(Math.pow(0.9604461,eXbeta)*100,0);
+                risk[1] = numberFormat(Math.pow(0.8634509,eXbeta)*100,0);
+                risk[2] = numberFormat(Math.pow(0.7227288,eXbeta)*100,0);
                 return risk;
                 }   

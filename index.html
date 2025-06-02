@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <link rel="shortcut icon" href="favicon.ico">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <title>VA-Risk Prediction 1 year post SAH Calculator</title>
+        <title>Predicting 10-Year Survival, Beginning One Year After Discharge from an Intracerebral Hemorrhage</title>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type ="text/css" href="cvdStyles.css">
@@ -21,7 +21,7 @@
         <form id ="myForm" >
             <div class ="container">
                 <div class="jumbotron clearfix">
-                    <h1 class = "head-center">Risk Prediction Calculator > 1 year Post-Discharge ICH</h1>
+                    <h1 class = "head-center">Predicting 10-Year Survival, Beginning One Year After Discharge from an Intracerebral Hemorrhage</h1>
                     <div class="well well-sm">
                         <legend class = "block-legend">Demographic Information</legend>
                         
@@ -88,11 +88,11 @@
                         
                     </div>
                     <div class="well well-sm">
-                        <legend class = "block-legend">Medical History</legend>    
+                        <legend class = "block-legend">Clinical History</legend>    
                         <div class ="row no-gutters">
-                            <div class ="col-sm-3 col-med-2 col-lg-2">
+                            <div class ="col-sm-4 col-med-4 col-lg-3">
                                 <div class="btn-group" data-toggle="buttons" >
-                                 <label class = "topLabel"><br/>Length of Hospitalization</label>
+                                 <label class = "topLabel"><br/>Length of Hospitalization(days)</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn text-input">
                                         <input type = "text" id ="txtHosp" size = "3" maxlength ="3" oninput="this.value=this.value.replace(/[^0-9]/g,'');" required/>
@@ -101,9 +101,9 @@
                                 </div>
                             </div>
 
-                            <div class ="col-sm-3 col-med-2 col-lg-2">
+                            <div class ="col-sm-4 col-med-3 col-lg-3">
                                 <div class="btn-group colors" data-toggle="buttons" id ="diab" >
-                                    <label class = "topLabel"><br/>History of diabetes?</label>
+                                    <label class = "topLabel"><br/><br/>History of diabetes?</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn btn-primary btn-sm" id = "diabMark" id = "diab1"> 
                                         <span class = "glyphicon glyphicon-check" id = "diabYGlyph" style="display:none"></span>
@@ -115,10 +115,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
+                            <div class ="col-sm-4 col-med-4 col-lg-3">
                                 <div class="btn-group colors" data-toggle="buttons" id ="dementia" >
                                    
-                                    <label class = "topLabel"><br/>History of Dementia?</label>
+                                    <label class = "topLabel"><br/><br/>History of Dementia?</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn btn-primary btn-sm" id = "dementMark"> 
                                         <span class = "glyphicon glyphicon-check" id = "dementYGlyph" style="display:none"></span>
@@ -131,24 +131,10 @@
                                 </div>
                             </div>
            
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
-                                <div class="btn-group colors" data-toggle="buttons" id ="hbp" >
-                              
-                                    <label class = "topLabel"><br/>Hypertension treatment?</label>
-                                    <div style="clear: both;"></div>
-                                    <label class="btn btn-primary btn-sm" id="hyperMark"> 
-                                        <span class = "glyphicon glyphicon-check" id = "hyperYGlyph" style="display:none"></span>
-                                        <input type="radio" name="Hypertension" value="Yes"  required > Yes
-                                    </label>
-                                    <label class="btn btn-primary btn-sm" id = "hyperMark1">
-                                        <span class = "glyphicon glyphicon-check" id = "hyperNGlyph" style="display:none"></span>
-                                        <input type="radio" name="Hypertension" value="No"  required > No
-                                    </label>
-                                </div>
-                            </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
+                           
+                            <div class ="col-sm-4 col-med-4 col-lg-3">
                                 <div class="btn-group colors" data-toggle="buttons" id ="TBI" >
-                                    <label class = "topLabel"><br/>TBI</label>
+                                    <label class = "topLabel"><br/>History of traumatic brain injury?</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn btn-primary btn-sm" id = "TBIMark"> 
                                         <span class = "glyphicon glyphicon-check" id = "TBIYGlyph" style="display:none"></span>
@@ -160,10 +146,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
+                            <div class ="col-sm-4 col-med-4 col-lg-3">
 
                                 <div class="btn-group colors" data-toggle="buttons" id ="priorKid" >                             
-                                    <label class = "topLabel"><br/>Prior chronic kidney disease?</label>
+                                    <label class = "topLabel"><br/>History of chronic kidney disease?</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn btn-primary btn-sm" id = "priorKidMark"> 
                                         <span class = "glyphicon glyphicon-check" id = "priorKidYGlyph" style="display:none"></span>
@@ -175,10 +161,10 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class ="col-sm-3 col-med-3 col-lg-2">
+                            <div class ="col-sm-4 col-med-4 col-lg-3">
                                 <br/>
                                 <div class="btn-group colors" data-toggle="buttons" id ="priorHF" >                             
-                                    <label class = "topLabel"><br/>Prior heart failure?</label>
+                                    <label class = "topLabel"><br/>History of heart failure?</label>
                                     <div style="clear: both;"></div>
                                     <label class="btn btn-primary btn-sm" id = "priorHFMark"> 
                                         <span class = "glyphicon glyphicon-check" id = "priorHFYGlyph" style="display:none"></span>
@@ -194,7 +180,27 @@
                         </div>
                     </div>
                     <div class="well well-sm">
-                        <legend class = "block-legend">Blood Pressure and Labs</legend>
+                        <legend class = "block-legend">Medication History (in the 6 months prior to hemorrhagic stroke admission)</legend>
+                            <div class ="row no-gutters">
+                                 <div class ="col-sm-4 col-med-4 col-lg-3">
+                                <div class="btn-group colors" data-toggle="buttons" id ="hbp" >
+                              
+                                    <label class = "topLabel"><br/>Blood pressure medications?</label>
+                                    <div style="clear: both;"></div>
+                                    <label class="btn btn-primary btn-sm" id="hyperMark"> 
+                                        <span class = "glyphicon glyphicon-check" id = "hyperYGlyph" style="display:none"></span>
+                                        <input type="radio" name="Hypertension" value="Yes"  required > Yes
+                                    </label>
+                                    <label class="btn btn-primary btn-sm" id = "hyperMark1">
+                                        <span class = "glyphicon glyphicon-check" id = "hyperNGlyph" style="display:none"></span>
+                                        <input type="radio" name="Hypertension" value="No"  required > No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="well well-sm">
+                        <legend class = "block-legend">Laboratory History (in the 2 years prior to hemorrhagic stroke admission)</legend>
                         <div class ="row no-gutters">
                             <div class ="col-sm-3 col-med-3 col-lg-3">
                                 <div class="btn-group" data-toggle="buttons" >
