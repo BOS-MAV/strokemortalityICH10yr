@@ -138,9 +138,10 @@ $(document).ready(function () {
     trigger: "manual",
   });
   $("#priorKid").tooltip({
-    title: "Please choose either yes or no",
+    title:
+      "Please enter yes or no \n CKD was defined as having any ICD code of ICD-9: 585.x, 250.4x, 403.9x, 753.13, 582.x or ICD-10: N18.x, E11.22, I12.9, Q61.2, N03.x",
     placement: "bottom",
-    trigger: "manual",
+    trigger: "hover",
   });
   $("#priorHF").tooltip({
     title: "Please choose either yes or no",
@@ -164,6 +165,12 @@ $(document).ready(function () {
       "Please enter a BMI between 12 and 60,leave blank if you do not have a value",
     placement: "bottom",
     trigger: "manual",
+  });
+  $("#raceMark2").tooltip({
+    title:
+      "comprised of “Asian, American Indian or Alaska Native, Native Hawaiian or Other Pacific Islander, or unknown",
+    placement: "bottom",
+    trigger: "hover",
   });
   function sex_Val() {
     return (
@@ -275,7 +282,10 @@ $(document).ready(function () {
           ) {
             $("#raceMark").tooltip("show");
             $("#race").focus();
-          } else $("#raceMark").tooltip("hide");
+          } else {
+            $("#raceMark").tooltip("hide");
+            $("#raceMark2").tooltip("hide");
+          }
           if (txtHosp_Val()) {
             if (
               $("input[name = 'Diabetes']:checked").val() !== "Yes" &&
@@ -358,6 +368,9 @@ $(document).ready(function () {
         }
       }
     }
+  });
+  $("#raceMark2").mouseover(function () {
+    $("#raceMark2").tooltip("show");
   });
   $("#BP_Sys").on("keydown", function (e) {
     if (e.key === "Enter") {
@@ -446,9 +459,7 @@ $(document).ready(function () {
       $("#raceMark").removeClass("btn-selected");
       $("#raceMark1").removeClass("btn-selected");
     }
-    setTimeout(function () {
-      $("#txtHosp").focus().select();
-    }, 100);
+    $("#Ethnicity").focus().select();
   });
   $("input[name='Ethnicity']").change(function () {
     $("#ethnMark").tooltip("hide");
@@ -463,7 +474,9 @@ $(document).ready(function () {
       $("#nhspGlyph").hide();
       $("#ethnMark").removeClass("btn-selected");
     }
-    $("#txtHosp").focus().select();
+    setTimeout(function () {
+      $("#txtHosp").focus().select();
+    }, 100);
   });
   $("input[name='Diabetes']").change(function () {
     $("#diabMark").tooltip("hide");
