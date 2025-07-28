@@ -13,7 +13,6 @@ var BP_SysToolTipOn = 1;
 var BP_DiaToolTipOn = 1;
 var BMIToolTipOn = 1;
 var dementiaToolTipOn = 1;
-var hyperToolTipOn = 1;
 var TBIToolTipOn = 1;
 var priorKidToolTipOn = 1;
 var priorHFToolTipOn = 1;
@@ -127,11 +126,6 @@ $(document).ready(function () {
     placement: "bottom",
     trigger: "manual",
   });
-  $("#hyperMark").tooltip({
-    title: "Please choose either yes or no",
-    placement: "bottom",
-    trigger: "manual",
-  });
   $("#TBIMark").tooltip({
     title: "Please choose either yes or no",
     placement: "bottom",
@@ -199,12 +193,6 @@ $(document).ready(function () {
       $("input[name='Dementia']:checked").val() === "No"
     );
   }
-  function hypertension_Val() {
-    return (
-      $("input[name='Hypertension']:checked").val() === "Yes" ||
-      $("input[name='Hypertension']:checked").val() === "No"
-    );
-  }
   function TBI_Val() {
     return (
       $("input[name='TBIR']:checked").val() === "Yes" ||
@@ -238,7 +226,6 @@ $(document).ready(function () {
       txtHosp_Val() &&
       diabetes_Val() &&
       dementia_Val() &&
-      hypertension_Val() &&
       TBI_Val() &&
       priorKid_Val() &&
       priorHF_Val() &&
@@ -305,58 +292,50 @@ $(document).ready(function () {
                 $("#dementia").focus().select();
               } else {
                 $("#dementMark").tooltip("hide");
+
                 if (
-                  $("input[name = 'Hypertension']:checked").val() !== "Yes" &&
-                  $("input[name = 'Hypertension']:checked").val() !== "No"
+                  $("input[name = 'TBIR']:checked").val() !== "Yes" &&
+                  $("input[name = 'TBIR']:checked").val() !== "No"
                 ) {
-                  $("#hyperMark").tooltip("show");
-                  $("#hbp").focus();
+                  $("#TBIMark").tooltip("show");
+                  $("#TBI").focus();
                 } else {
-                  $("#hyperMark").tooltip("hide");
+                  $("#TBIMark").tooltip("hide");
+
                   if (
-                    $("input[name = 'TBIR']:checked").val() !== "Yes" &&
-                    $("input[name = 'TBIR']:checked").val() !== "No"
+                    $("input[name= 'priorKid']:checked").val() !== "Yes" &&
+                    $("input[name= 'priorKid']:checked").val() !== "No"
                   ) {
-                    $("#TBIMark").tooltip("show");
-                    $("#TBI").focus();
+                    $("#priorKid").tooltip("show");
+                    $("#priorKid").focus();
                   } else {
-                    $("#TBIMark").tooltip("hide");
-
+                    $("#priorKid").tooltip("hide");
                     if (
-                      $("input[name= 'priorKid']:checked").val() !== "Yes" &&
-                      $("input[name= 'priorKid']:checked").val() !== "No"
+                      $("input[name= 'priorHF']:checked").val() !== "Yes" &&
+                      $("input[name= 'priorHF']:checked").val() !== "No"
                     ) {
-                      $("#priorKid").tooltip("show");
-                      $("#priorKid").focus();
+                      $("#priorHF").tooltip("show");
+                      $("#priorHF").focus();
+                    } else $("#priorHF").tooltip("hide");
+                    if (!BP_Sys_Val(true)) {
+                      $("#BP_Sys").tooltip("show");
+                      $("#BP_Sys").focus();
                     } else {
-                      $("#priorKid").tooltip("hide");
-                      if (
-                        $("input[name= 'priorHF']:checked").val() !== "Yes" &&
-                        $("input[name= 'priorHF']:checked").val() !== "No"
-                      ) {
-                        $("#priorHF").tooltip("show");
-                        $("#priorHF").focus();
-                      } else $("#priorHF").tooltip("hide");
-                      if (!BP_Sys_Val(true)) {
-                        $("#BP_Sys").tooltip("show");
-                        $("#BP_Sys").focus();
+                      $("#BP_Sys").tooltip("hide");
+                      BP_SysToolTipOn = 1;
+                      if (!BP_Dia_Val(true)) {
+                        $("#BP_Dia").tooltip("show");
+                        $("#BP_Dia").focus();
                       } else {
-                        $("#BP_Sys").tooltip("hide");
-                        BP_SysToolTipOn = 1;
-                        if (!BP_Dia_Val(true)) {
-                          $("#BP_Dia").tooltip("show");
-                          $("#BP_Dia").focus();
-                        } else {
-                          $("#BP_Dia").tooltip("hide");
-                          BP_DiaToolTipOn = 1;
+                        $("#BP_Dia").tooltip("hide");
+                        BP_DiaToolTipOn = 1;
 
-                          if (!BMI_Val(true)) {
-                            $("#BMI").tooltip("show");
-                            $("#BMI").focus().select();
-                          } else {
-                            $("#BMIL").tooltip("hide");
-                            BMIToolTipOn = 1;
-                          }
+                        if (!BMI_Val(true)) {
+                          $("#BMI").tooltip("show");
+                          $("#BMI").focus().select();
+                        } else {
+                          $("#BMIL").tooltip("hide");
+                          BMIToolTipOn = 1;
                         }
                       }
                     }
@@ -508,23 +487,6 @@ $(document).ready(function () {
     }
     $("#TBI").focus();
   });
-  $("input[name='Hypertension']").change(function () {
-    $("#hyperMark").tooltip("hide");
-    if ($("input[name='Hypertension']:checked").val() === "Yes") {
-      $("#hyperMark").addClass("btn-selected");
-      $("#hyperYGlyph").show();
-      $("#hyperNGlyph").hide();
-      $("#hyperMark1").removeClass("btn-selected");
-    } else {
-      $("#hyperMark1").addClass("btn-selected");
-      $("#hyperNGlyph").show();
-      $("#hyperYGlyph").hide();
-      $("#hyperMark").removeClass("btn-selected");
-    }
-    setTimeout(function () {
-      $("#BP_Sys").focus().select();
-    }, 100);
-  });
   $("input[name='TBIR']").change(function () {
     $("#TBIMark").tooltip("hide");
     if ($("input[name='TBIR']:checked").val() === "Yes") {
@@ -571,7 +533,7 @@ $(document).ready(function () {
     }
     // $("#BP_Sys").focus().select();
     setTimeout(function () {
-      $("#hbp").focus().select();
+      $("#BP_Sys").focus().select();
     }, 100);
   });
   /* $("#BP_Sys").blur(function () {
